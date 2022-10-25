@@ -417,7 +417,12 @@ def hugenoun():
     if r1=='w':r1m='u'
     elif r1=='y':r1m='i' 
     else: r1m=r1
-    conjres = 'ma%saa%s'%(r1m,r3) if r2=='a' else 'ma%s%saa%s'%(r1m,r2,r3)
+    if r2=='h':
+        r1m=midcphoch(r1)
+        conjres = 'ma%saa%s'%(r1m,r3)
+    else: conjres = 'ma%s%saa%s'%(r1m,r2,r3)
+    if r2=='a':
+        conjres = 'ma%saa%s'%(r1m,r3)
     if r1=='a' and r2=='a':
         conjres = "ma'aa%s"%(r3)
     if lrt==4:
