@@ -7,10 +7,10 @@ import xlrd
 '''窗口'''
 rc = Tk()
 rc.title('词根屈折器')
-rc.iconbitmap("E:/langs/langs/zfhico.ico")
+rc.iconbitmap("./zfhico.ico")
 rc.geometry("300x125+605+320")
 
-lexique = xlrd.open_workbook('E:/langs/langs/apps/root_conjugator/walexique.xls')
+lexique = xlrd.open_workbook('./walexique.xls')
 
 roottxt = Label(rc, text = '词根:')
 roottxt.grid(row = 0, column = 0, sticky = tk.E, padx = 5)
