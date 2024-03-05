@@ -1,17 +1,14 @@
-import sys
 import tkinter as tk
-import tkinter.ttk as ttk
 from tkinter import *
-import tkinter.font as tkFont
 import tkinter.messagebox as messagebox
-import time
 import datetime
 from cmath import nan
 ################
 '''窗口'''
 dtc = tk.Tk()
 dtc.title('时间/进制转换器')
-dtc.geometry("260x325+638+320")
+##dtc.iconbitmap("E:\langs\langs\dtc.ico")
+dtc.geometry("280x350+638+320")
 
 dtnow = Label(dtc, text = '当前日期')
 dtnow.grid(row = 0, columnspan = 6, column = 0)
@@ -55,6 +52,9 @@ num10.grid(row = 13, column = 0)
 num4 = Label(dtc, text = '四进制:')
 num4.grid(row = 13, column = 3)
 
+numbalstz = Label(dtc, text = '传统音节表示：')
+numbalstz.grid(row = 14, columnspan = 2, column = 0)
+
 # entry box
 yearnow = Entry(dtc, width = 5, justify = CENTER)
 yearnow.grid(row = 1, column = 0, sticky = tk.E, padx = 2)
@@ -95,8 +95,12 @@ num4EL = tk.StringVar()
 num4bx = Entry(dtc, textvariable = num4EL, width = 8, justify = RIGHT)
 num4bx.grid(row = 13, column = 4, columnspan = 2, sticky = tk.E)
 
+balstzopLabel = tk.StringVar()
+balstzop = tk.Label(dtc, textvariable = balstzopLabel, font = ('Pinaaz',14))
+balstzop.grid(row = 14, column = 3, columnspan = 3, sticky = tk.E)
+
 # 10/20 trans
-#h1020 = StringVar()
+#h1020 = tk.StringVar()
 #h1020.set('10')
 
 #h1020.h10 = Radiobutton(dtc, text='10小时制')
@@ -124,17 +128,19 @@ def deltime():
 
 def transnum():
     if num10EL.get():
-        if int(num10EL.get())>65535:
-           messagebox.showinfo('错误','太大了！\n需要小于65535') 
+        if int(num10EL.get())>262143:
+           messagebox.showinfo('错误','太大了！\n需要小于262143') 
         else:
             num4EL.set(dec2quat(num10EL.get()))
+            balstzopLabel.set(balstz(dec2quat(num10EL.get())))
     elif num4EL.get():
-        if int(num4EL.get())>33333333:
-            messagebox.showinfo('错误','太大了！\n需要小于33333333')
+        if int(num4EL.get())>333333333:
+            messagebox.showinfo('错误','太大了！\n需要小于333333333')
         elif ('4' or '5 'or '6' or '7' or '8' or '9') in num4EL.get():
             messagebox.showinfo('错误','请输入正确的四进制数字。')
         else:
             num10EL.set(quat2dec(num4EL.get()))
+            balstzopLabel.set(balstz(num4EL.get()))
 
 def delnum():
     num10bx.delete(0,END)
@@ -153,10 +159,10 @@ clearbut2 = Button(dtc, text = '清除', command = deltime, relief = 'raised')
 clearbut2.grid(row = 10, rowspan = 2, column = 6)
 
 inputbut3 = Button(dtc, text = '转换', command = transnum, relief = 'raised')
-inputbut3.grid(row = 14, column = 2)
+inputbut3.grid(row = 15, column = 2)
 
 clearbut3 = Button(dtc, text = '清除', command = delnum, relief = 'raised')
-clearbut3.grid(row = 14, column = 4)
+clearbut3.grid(row = 15, column = 4)
 
 ############
 '''获得时间'''
@@ -262,8 +268,38 @@ def dec2quat(d):
 def quat2dec(quat):
     dec=0
     for x in range(len(quat)):
-        dec+=int(quat[len(quat)-1-x])*pow(4,x)
+        dec+=int(quat[len(quat)-1-x])*4**x
     return dec
+
+'''传统音节数字表示法'''
+def balstz(numany):
+    num=int(numany)
+    i=0
+    l=0
+    z=0
+    res = []
+    s=['k','','t','','C','','c','','s','','S','','T','','f','','n','']
+    #1, 10, 100, 1000, 1 0000, 10 0000, 100 0000, 1000 0000, 1 0000 0000
+    stz=''
+    while num:
+        res.append(tostz(num % 10))
+        num //= 10
+        l+=1
+    #~~逆序，按正常的顺序返回~~
+    #**从低位到高位表示，不需要reverse(即使是倒序也不需要reverse方法，只需[::-1]即可)**
+    #res.reverse()
+    while i<l and i>=0:
+        s[2*i+1] = res[i]
+        i+=1
+    stz=''.join(s[0:l*2])
+    return stz
+
+def tostz(numin):
+    if numin == 0: return '';
+    elif numin == 1: return 'a';
+    elif numin == 2: return 'i';
+    elif numin == 3: return 'u';
+    else: return 'o'
 
 '''时分秒转换'''
 def timeswitch():
