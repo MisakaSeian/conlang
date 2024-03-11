@@ -7,7 +7,7 @@ from cmath import nan
 '''窗口'''
 dtc = tk.Tk()
 dtc.title('时间/进制转换器')
-##dtc.iconbitmap("E:\langs\langs\dtc.ico")
+##dtc.iconbitmap("dtc.ico")
 dtc.geometry("280x350+638+320")
 
 dtnow = Label(dtc, text = '当前日期')
