@@ -110,7 +110,7 @@ balstzop.grid(row = 14, column = 3, columnspan = 3, sticky = tk.E)
 def transdate():
     days()
     febidoutputLabel.set('%d年%d月%d日'%(febidyear(),febidmonth(),febiddate()))
-    wagifuroutputLabel.set('%d年%s月%d日'%(wayear(),wamonth(),wadate()))
+    wagifuroutputLabel.set('%d年%s月%d日 %s'%(wayear(),wamonth(),wadate()[0],wadate()[1]))
 
 def transtime():
     timeswitch()
@@ -202,27 +202,18 @@ def wayear():
     return wy
 
 def wamonth():
+    wmonths = ('神圣(1)', '泉水(2)', '种植(3)', '香料(4)',
+               '休息(5)', '炎热(6)', '降雨(7)', '月亮(8)',
+               '中间(9)', '登山(10)', '收获(11)', '出行(12)',
+               '大风(13)', '大雪(14)', '征服(15)', '朝拜(16)')
     wam = (days()-(febidyear()-2263)*320)//20+1
-    if wam == 1: wm = '神圣(1)'
-    elif wam == 2:wm = '泉水(2)'
-    elif wam == 3:wm = '种植(3)'
-    elif wam == 4:wm = '香料(4)'
-    elif wam == 5:wm = '休息(5)'
-    elif wam == 6:wm = '炎热(6)'
-    elif wam == 7:wm = '降雨(7)'
-    elif wam == 8:wm = '月亮(8)'
-    elif wam == 9:wm = '中间(9)'
-    elif wam == 10:wm = '登山(10)'
-    elif wam == 11:wm = '收获(11)'
-    elif wam == 12:wm = '出行(12)'
-    elif wam == 13:wm = '大风(13)'
-    elif wam == 14:wm = '大雪(14)'
-    elif wam == 15:wm = '征服(15)'
-    elif wam == 16:wm = '朝拜(16)'
-    return wm
+    return wmonths[wam]
 
 def wadate():
-    wd = (days()-(febidyear()-2263)*320)%20+1
+    wd = [0,'']
+    wweekd = ('gizlukat', 'balugil', 'balutlit', 'balucat', 'baluddis')
+    wd[0] = (days()-(febidyear()-2263)*320)%20+1
+    wd[1] = wweekd[wd[0]%5]
     return wd
 
 def runnian():
